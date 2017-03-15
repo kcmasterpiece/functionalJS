@@ -1,9 +1,8 @@
+var copy = require('deep-copy');
 function getDependencies(tree) {
+	tree = copy(tree);
 	function getDependenciesRecursive(tree, deps) {
-		tree = Object.assign({}, tree);
 
-		//console.log(tree, deps, ++count);
-		//(typeof tree === 'undefined') || 
 		if ((typeof tree !== 'object') || !tree.dependencies || Object.entries(tree.dependencies).length === 0) {
 			return deps;
 		}
@@ -22,14 +21,8 @@ function getDependencies(tree) {
 		return getDependenciesRecursive(tree, deps);
 	}
 	var dependents = [];
-	try {
 	getDependenciesRecursive(tree, dependents);
-	} catch (err) {
-		console.log(err);
-	}
-
-	console.log(JSON.stringify(dependents));
-	return dependents; 
+	return dependents.sort(); 
 }
 
 module.exports = getDependencies;
